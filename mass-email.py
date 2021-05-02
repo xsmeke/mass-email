@@ -18,25 +18,25 @@ csvf = args.csv
 verbose = False
 
 # User input
-username = raw_input("Username: ")
-password = getpass.getpass("Password: ")
-name = raw_input("Name: ")
-subject = raw_input("Subject: ")
+# username = input("Username: ")
+# password = input("Password: ")
+# name = input("Name: ")
+# subject = input("Subject: ")
 emails_sent = 0
 
 # Login to SMTP Server
 def login(username, password):
     try:
-        server = smtplib.SMTP("smtp.gmail.com:587")
+        server = smtplib.SMTP("smtp.gmail.com",587)
         server.starttls()
         server.login(username, password)
         return server
     except smtplib.SMTPAuthenticationError:
-        print "Incorrect Username or Password"
+        print ("Incorrect Username or Password")
         server.close()
         sys.exit(1)
 
-server = login(username, password)
+server = login("xsmeke@gmail.com", "jLnW65EE")
 
 # Read Markdown file into template
 with open(markdownf, 'r') as md_file:
@@ -51,18 +51,18 @@ with open(csvf, 'r') as csv_file:
 
         # Format Email
         msg = MIMEText(html, 'html')
-        msg['Subject'] = subject
-        msg['From'] = name
+        msg['Subject'] = 'Regarding HCI Project Opportunity'
+        msg['From'] = 'Ayush Pandey'
         msg['To'] = row['email']
 
         # Print out emails to screen
         if verbose == True:
-            print msg.as_string()
+            print (msg.as_string())
 
         # Send email
-        server.sendmail(username, [row['email']], msg.as_string())
-        print "Email sent to: %s" % row['email']
+        server.sendmail('xsmeke@gmail.com', [row['email']], msg.as_string())
+        print ("Email sent to: %s" % row['email'])
         emails_sent += 1
 server.close()
-print "\nTotal Emails Sent:", emails_sent
+print ("\nTotal Emails Sent:", emails_sent)
 
